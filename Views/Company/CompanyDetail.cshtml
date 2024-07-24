@@ -1,0 +1,76 @@
+﻿@model CompanyDetailModel;
+@{
+    var fullStars = (int)Model.NormalizedAverageRating;
+    var halfStar = Model.NormalizedAverageRating - fullStars >= 0.5 ? 1 : 0;
+    var emptyStars = 5 - fullStars - halfStar;
+}
+
+<!DOCTYPE html>
+<head>
+
+    <link href="/css/landing.css" rel="stylesheet">
+    <link href="/css/landingBody.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <!-- Link to the external CSS file -->
+</head>
+<div class="container-company-Detail">
+    <div class="d-flex flex-wrap">
+        <div class="nav-company-container">
+            <div class="full-width-image-container">
+                <img src="/Images/@Model.ImageUrl" style="width: 100%" />
+            </div>
+           @*  <img src="/Images/@Model.ImageUrl" style="width: 100%" /> *@
+            <h1 class="card-title">@Model.Name</h1>
+            <ul class="list-unstyled d-flex">
+
+              
+                @for (int i = 0; i < fullStars; i++)
+                {
+                    <li><span class="fas fa-star"></span></li>
+                }
+                @if (halfStar == 1)
+                {
+                    <li><span class="fas fa-star-half-alt"></span></li>
+                }
+                @for (int i = 0; i < emptyStars; i++)
+                {
+                    <li><span class="far fa-star"></span></li>
+                }
+            </ul>
+            @foreach (var Trip in Model.Trips)
+            {
+
+                <div class="card-trip">
+
+                    <img src="/Images/@Trip.MainImage" class="card-img-top" alt="...">
+                    <div class="card-trip-body">
+                        <h5 class="card-title">@Trip.Name</h5>
+                        <p>@Trip.Description</p>
+                        <a href="/Company/TripDetail?id=@Trip.Id">Trip Details</a>
+                    </div>
+
+                </div>
+
+            }
+
+        </div>
+        
+           @*  @foreach (var Trip in Model.Trips)
+            {
+               
+                <div class="card-trip">
+                  
+                    <img src="/Images/@Trip.MainImage" class="card-img-top" alt="...">
+                    <div class="card-trip-body">
+                        <h5 class="card-title">@Trip.Name</h5>
+                        <p>@Trip.Description</p>
+                        <a href="/Company/TripDetail?id=@Trip.Id">Trip Details</a>
+                    </div>
+                 
+                </div>
+      
+            } *@
+
+    </div>
+</div>

@@ -1,0 +1,281 @@
+﻿
+:root {
+    --surface-color: #fff;
+    --curve: 40;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: #fef8f8;
+}
+.container-landing {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.landingPage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-image: url(/Images/mountain-and-lake-at-sunset-135157.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.Langing-overlay {
+    position: relative;
+}
+    .Langing-overlay h2 {
+        position: absolute;
+        font-weight: bold;
+        font-size: 60px;
+        top: 10%;
+        left: 25px;
+    }
+.Langing-overlay p {
+    position: absolute;
+    font-weight: bold;
+    font-size: 18px;
+    top: 45%;
+   /* bottom: 60%;*/
+}
+.Langing-overlay {
+    position: absolute;
+    width: 60%;
+    color: white;
+    height: 70%;
+    top: 15%;
+    left: 25px;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 5;
+    padding-left: 25px;
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+    .Langing-overlay h2 span {
+        display: block;
+    }
+    .Langing-overlay::before {
+        content: "";
+        background: #D7BDCA;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+        position: absolute;
+        left: 0;
+        opacity: -0.5;
+        /*transition: all 0.3s ease-out;*/
+    }
+
+
+.search {
+    position: relative;
+    position: absolute;
+    box-shadow: 0 0 40px rgba(51, 51, 51, .1);
+    bottom: 15%;
+}
+
+.search input {
+    height: 65px;
+    width: 400px;
+    /*text-indent: 25px;*/
+    border: 2px solid #d6d4d4;
+}
+
+
+.search input:focus {
+    box-shadow: none;
+    border: 2px solid blue;
+}
+
+.search button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        height: 50px;
+        width: 80px;
+        background: blue;
+}
+
+.search-result-item {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+}
+
+    .search-result-item img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .search-result-item a {
+        color: blue;
+        text-decoration: none;
+    }
+
+search-result-item a:hover {
+    text-decoration: underline;
+}
+
+.Langing-overlay .SearchItems {
+    background-color: white;
+    height: 180px;
+    overflow-y: auto;
+    position: absolute;
+    top: 450px;
+    left: 0.5px;
+}
+
+.fa-star, .fa-star-half-alt {
+    color: black;
+    font-size: 11px;
+    margin: 0 1px;
+}
+
+
+/* container-discover*/
+
+
+container-discover .discover-Serve .lorem-lorem h2 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+}
+.value-Container {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    
+}
+
+.card-img, .card-img-top {
+    height: 250px;
+    object-fit: cover;
+}
+card-body {
+    height: 150px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 4rem 5vw;
+    padding: 0;
+    list-style-type: none;
+}
+
+.card {
+    position: relative;
+    display: block;
+    height: 100%;
+    border-radius: calc(var(--curve) * 1px);
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.card__image {
+    width: 100%;
+    height: auto;
+}
+
+.card__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    border-radius: calc(var(--curve) * 1px);
+    background-color: var(--surface-color);
+    transform: translateY(100%);
+    transition: .2s ease-in-out;
+}
+
+.card:hover .card__overlay {
+    transform: translateY(0);
+}
+
+.card__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    padding: 2em;
+    border-radius: calc(var(--curve) * 1px) 0 0 0;
+    background-color: var(--surface-color);
+    transform: translateY(-100%);
+    transition: .2s ease-in-out;
+}
+
+.card__arc {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    z-index: 1;
+}
+
+    .card__arc path {
+        fill: var(--surface-color);
+        d: path("M 40 80 c 22 0 40 -22 40 -40 v 40 Z");
+    }
+
+.card:hover .card__header {
+    transform: translateY(0);
+}
+
+.card__thumb {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.card__title {
+    font-size: 1em;
+    margin: 0 0 .3em;
+    color: #6A515E;
+}
+
+.card__tagline {
+    display: block;
+    margin: 1em 0;
+    font-family: "MockFlowFont";
+    font-size: .8em;
+    color: #D7BDCA;
+}
+
+.card__status {
+    font-size: .8em;
+    color: #D7BDCA;
+}
+
+.card__description {
+    padding: 0 2em 2em;
+    margin: 0;
+    color: #D7BDCA;
+    font-family: "MockFlowFont";
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}    

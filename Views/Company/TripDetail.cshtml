@@ -1,0 +1,50 @@
+﻿@model Trip
+@{
+     var fullStars = (int)Model.AverageRating;
+     var halfStar = Model.AverageRating - fullStars >= 0.5 ? 1 : 0;
+     var emptyStars = 5 - fullStars - halfStar;
+}
+
+<!DOCTYPE html>
+<head>
+
+    <link href="/css/landing.css" rel="stylesheet">
+    <link href="/css/landingBody.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <!-- Link to the external CSS file -->
+</head>
+<image src="/Images/@Model.MainImage"></image>
+<h1>Welcome to Trip @Model.Name</h1>
+<ul class="list-unstyled d-flex">
+
+
+    @for (int i = 0; i < fullStars; i++)
+    {
+        <li><span class="fas fa-star"></span></li>
+    }
+    @if (halfStar == 1)
+    {
+        <li><span class="fas fa-star-half-alt"></span></li>
+    }
+    @for (int i = 0; i < emptyStars; i++)
+    {
+        <li><span class="far fa-star"></span></li>
+    }
+</ul>
+<p>@Model.Description </p>
+
+<p>@Model.DestinationFrom</p>
+<p>@Model.DestinationTo</p>
+
+<p>@Model.TripStartDate</p>
+<p>@Model.TripEndDate</p>
+
+<p>@Model.ActualTravels</p>
+<p>@Model.MaxTravels</p>
+
+<p>@Model.TripPrice</p>
+<p>@Model.Discount</p>
+<p>@Model.TripPriceAfterDiscount</p>
+
+@* <i> Average Rating</i> *@
