@@ -84,6 +84,7 @@
                 <div class="card-body">
                     <h5 class="card-title">@Company.Name</h5>
                     <a href="/Company/CompanyDetail?id=@Company.Id" class="btn btn-primary">Show Details</a>
+
                     <ul class="list-unstyled d-flex">
                         @for (int i = 0; i < fullStars; i++)
                         {
@@ -103,35 +104,6 @@
         }
     </div>
 </div>
-
-@* <script>
-    jQuery(document).ready(function () {
-        $('#inputSearch').keyup(function () {
-            var searchTerm = $(this).val();
-
-            if (searchTerm.length > 2) {
-                $.ajax({
-                    url: '/Home/Search',
-                    type: 'POST',
-                    data: { search: searchTerm },
-                    success: function (data) {
-                        $('searchResults').html(data);
-                    },
-                    error: function (xhr, status, error) {
-                        // If there is an error, log it to the console
-                        console.error("Error: " + status + " " + error);
-                    }
-                })
-            } else {
-                // If the input length is less than 3 characters, clear the search results
-                $('#searchResults').html('');
-            }
-
-        })
-    })
-
-</script> *@
-
 
 <script>
     jQuery(document).ready(function () {

@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    bool showFooter = ViewBag.ShowFooter != null ? (bool)ViewBag.ShowFooter : true;
+}
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,7 +12,10 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TripsCompanySystem.styles.css" asp-append-version="true" />
+
+    <link href="/css/Account.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/e8dc964e88.js" crossorigin="anonymous"></script>
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <header>
@@ -26,13 +34,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="Companies">Compaines</a>
-                        </li>
+                        <partial name="_LogInPartial">
                     </ul>
+                   
                 </div>
             </div>
         </nav>
@@ -40,14 +44,23 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+            @if (showFooter)
+            {
+                <footer class="border-top footer text-muted">
+                    <div class="container">
+                        &copy; 2024 - TripsCompanySystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </div>
+                </footer>
+            }
+         @*    @RenderSection("Scripts", required: false) *@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+  @*   <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - TripsCompanySystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
+    </footer> *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

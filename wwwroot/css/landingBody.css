@@ -87,13 +87,15 @@ body {
     background-color: #FFFf;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+.card-trip-body .name-and-rate {
+    display: flex;
+}
 
-    .card-trip:hover {
-        transition-duration: 0.2s;
-        transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-   
-    }
+.card-trip:hover {
+    transition-duration: 0.2s;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
         .card-trip img {
             width: 100px;
@@ -106,4 +108,5 @@ body {
 
 .card-trip-body h5{
     font-weight: bold;
+    padding-right: 20px;
 }

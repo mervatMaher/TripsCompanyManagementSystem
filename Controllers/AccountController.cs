@@ -1,11 +1,16 @@
 ﻿using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
+using Microsoft.AspNetCore.Identity.UI.V5.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Routing.Constraints;
+using Microsoft.IdentityModel.Tokens;
+using System.Linq;
 using TripsCompanySystem.Data;
 using TripsCompanySystem.Models;
 using TripsCompanySystem.ViewModel;
-
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace TripsCompanySystem.Controllers
 {
     public class AccountController : Controller
@@ -25,68 +30,246 @@ namespace TripsCompanySystem.Controllers
             _serviceProvider = serviceProvider;
             _logger = logger;
         }
-        public IActionResult Register()
+
+        public JsonResult IsLoggedIn ()
         {
-            var Register = new RegistrationModel();
-            return View(Register);
+            var isLoggedIn = User.Identity.IsAuthenticated;
+            return Json(new { isLoggedIn });
         }
-        [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveRegistration( /*[FromForm]*/ RegistrationModel registModel)
+        public IActionResult LogIn()
         {
-            if(!ModelState.IsValid ) {
+            var Login = new LogInViewModel();
+            return View(Login);
+        }
 
-                _logger.LogWarning("Invalid model state for registration.");
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveLogIn(LogInViewModel logIn)
+        {
 
+            var user = await _userManager.FindByEmailAsync(logIn.Email);
+            if (user != null)
+            {
+                var passwordCheck = await _userManager.CheckPasswordAsync(user, logIn.Password);
+
+                if (passwordCheck)
+                {
+                    
+                        var result = await _signInManager.PasswordSignInAsync(user.UserName, logIn.Password, logIn.RememberMe, lockoutOnFailure: false);
+
+                        if (result.Succeeded)
+                        {
+
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Email or Password incorrect");
+                        }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Email or Password incorrect");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Email or Password incorrect");
             }
 
-            var rolesName = new[] {"Admin", "Moderator", "Visitor" };
-            foreach(var role in rolesName)
+            return View("LogIn", logIn);
+
+        }
+        public IActionResult Register()
+        {
+            var Register = new RegistrationViewModel();
+            return View(Register);
+        }
+
+        [HttpPost] 
+        public async Task<IActionResult> SaveRegistration([FromForm] RegistrationViewModel registModel)
+        {
+
+            var rootDirectory = Directory.GetCurrentDirectory();
+            var uploadDirectory = Path.Combine(rootDirectory, "wwwroot", "Images");
+            if (!Directory.Exists(uploadDirectory))
             {
-                if (!await _roleManager.RoleExistsAsync(role))
+                Directory.CreateDirectory(uploadDirectory);
+            }
+
+            var RoleNames = new[] { "Admin", "Moderator", "Visitor" };
+            foreach (var roleName in RoleNames)
+            {
+                if (!_context.Roles.Any(r => r.Name == roleName))
                 {
-                  var roleResult = await _roleManager.CreateAsync(new IdentityRole(role));
-    
-
-                    if(!roleResult.Succeeded)
-                    {
-                        _logger.LogError("Failed To create role {Role}. Errors : {Errors}"
-                            , role,
-                            string.Join(" , ", roleResult.Errors.Select(e => e.Description)));
-
-                        return StatusCode(500, "internal server error ");
-                    };
-                    
+                    await _roleManager.CreateAsync(new IdentityRole(roleName));
                 }
             }
 
-            var User = new ApplicationUser
+            var user = new ApplicationUser
             {
                 FullName = registModel.FullName,
-                UserName = registModel.UserName,
                 Email = registModel.Email,
-                PhoneNumber = registModel.PhoneNum,
-                //MainImage = registModel.Image 
-
+                UserName = registModel.UserName,
+                PhoneNumber = registModel.PhoneNumber,
             };
 
-            var result = await _userManager.CreateAsync(User, registModel.Password);
-            await _context.SaveChangesAsync();
+            if (registModel.Image != null)
+            {
+                var uniqueFileName = Guid.NewGuid().ToString() + "_" + registModel.Image.FileName;
+                var pathCompanyImage = Path.Combine(uploadDirectory, uniqueFileName);
 
+                using (var stream = new FileStream(pathCompanyImage, FileMode.Create))
+                {
+                    await registModel.Image.CopyToAsync(stream);
+                }
+
+                user.MainImage = uniqueFileName;
+            }
+
+
+            var result = await _userManager.CreateAsync(user, registModel.Password);
+             
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(User, "Visitor");
-                await _signInManager.SignInAsync(User, isPersistent: registModel.RememberMe);
-
-                _logger.LogInformation("User {UserName} registered successfully.", User.UserName);
+                await _userManager.AddToRoleAsync(user, "Visitor");
+                await _signInManager.SignInAsync(user, false);
 
                 return RedirectToAction("Index", "Home");
             }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
 
-            await _context.SaveChangesAsync();
-
-            return View("Register", registModel); 
+            return View("Register", registModel);
         }
+
+        public IActionResult VerifyEmail()  
+        {
+            var verifyEmail = new VerifyViewModel();
+            return View(verifyEmail);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveVerifyEmail(VerifyViewModel verifyModel)
+        {
+            var user = await _userManager.FindByEmailAsync(verifyModel.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Something is Wrong");
+                return View("VerifyEmail", verifyModel);
+            } else
+            {
+                return RedirectToAction("ChangePassword", "Account", new {Email = verifyModel.Email});
+            }
+        }
+
+        public IActionResult ChangePassword(string Email)
+        {
+            if (string.IsNullOrEmpty(Email))
+            {
+                return RedirectToAction("VerifyEmail", "Account");
+            }
+            var changePassword = new ChangePasswordViewModel();
+            changePassword.Email = Email;
+
+            return View(changePassword);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveChangePassword(ChangePasswordViewModel changePassword)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(changePassword.Email);
+                if (user != null)
+                {
+                    var result = await _userManager.RemovePasswordAsync(user);
+                    if (result.Succeeded)
+                    {
+                        result = await _userManager.AddPasswordAsync(user, changePassword.NewPassword);
+                        return RedirectToAction("LogIn", "Account"); 
+
+                    } else
+                    {
+                        foreach(var error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "EmailNotValid");
+                }
+
+            }
+           
+            return View("ChangePassword", changePassword);
+        }
+        public async Task<IActionResult> LogOut()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        public IActionResult ShowProfile(string id)
+        {
+            var user = _context.Users.Find(id);
+            return View(user);
+        }
+
+        public IActionResult EditProfile (string id)
+        {
+            var user = _context.Users.Find(id);
+            return View(user);
+        }
+
+        public async Task<IActionResult> SaveEditProfile (string id ,EditProfileViewModel editProfileView)
+        {
+            var rootDirectory = Directory.GetCurrentDirectory();
+            var uploadDirectory = Path.Combine(rootDirectory, "wwwroot", "Images");
+            if (!Directory.Exists(uploadDirectory))
+            {
+                Directory.CreateDirectory(uploadDirectory);
+            }
+
+            var user = _context.Users.Find(id);
+            if (user != null) {
+                user.FullName = editProfileView.FullName;
+                user.UserName = editProfileView.UserName;
+                user.Email = editProfileView.Email;
+                user.PhoneNumber = editProfileView.PhoneNumber;
+            }
+
+            if (!string.IsNullOrEmpty(editProfileView.Password))
+            {
+                var hasher = new PasswordHasher<ApplicationUser>();
+                user.PasswordHash = hasher.HashPassword(user, editProfileView.Password);
+                
+            }
+
+            if (editProfileView.Image != null)
+            {
+                var uniqueFileName = Guid.NewGuid().ToString() + "_" + editProfileView.Image.FileName;
+                var pathCompanyImage = Path.Combine(uploadDirectory, uniqueFileName);
+
+                using (var stream = new FileStream(pathCompanyImage, FileMode.Create))
+                {
+                    await editProfileView.Image.CopyToAsync(stream);
+                }
+
+                user.MainImage = uniqueFileName;
+            }
+            _context.Update(user);
+            _context.SaveChanges();
+
+            return RedirectToAction("ShowProfile", "Account" ,new {id = user.Id});
+        }
+
+        
     }
 }

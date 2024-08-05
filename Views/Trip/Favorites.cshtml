@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<head>
+
+    <link href="/css/landing.css" rel="stylesheet">
+    <link href="/css/landingBody.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <!-- Link to the external CSS file -->
+</head>
+
+<div class="container">
+    <h1>Welcome to Your Favorite List @ViewBag.UserName </h1>
+    <div class="d-flex flex-wrap">
+
+        @foreach (var Trip in ViewBag.Favorites)
+        {
+            <div class="card m-2 card-style" style="width: 18rem;">
+                <img src="/images/@Trip.TripImage" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">@Trip.TripName</h5>
+                    <a href="/Company/TripDetail?id=@Trip.TripId" class="btn btn-primary">Show Details</a>
+@*                     <a href="#" class="btn btn-danger btn-remove-favorite" data-trip-id="@Trip.TripId">Delete</a>
+ *@
+                    <a href="/Trip/Delete?id=@Trip.TripId" class="btn btn-danger btn-remove-favorite" data-trip-id="@Trip.TripId">Delete</a>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@* <script>
+    $(document).ready(function () {
+        $('.btn-remove-favorite').on('click', function (e) {
+            e.preventDefault(); // Prevent the default anchor action
+
+            var card = $(this).closest('.card');
+            var tripId = $(this).data('trip-id');
+
+            // Remove the card from the UI
+            card.remove();
+
+            // Optionally, notify the server about the removal
+            $.ajax({
+                url: '@Url.Action("RemoveFromFavorites", "Trip")',
+                type: 'POST',
+                data: { tripId: tripId },
+                success: function () {
+                    console.log('Trip removed from favorites.');
+                }
+                // error: function () {
+                //     alert('An error occurred while removing the trip.');
+                // }
+            });
+        });
+    });
+</script> *@

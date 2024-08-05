@@ -1,0 +1,53 @@
+﻿@model BookingViewModel
+<div>
+    <h1>Book Trip :- @ViewBag.Trip.Name </h1>
+    <form method="post" action="/Booking/SaveBooking" enctype="multipart/form-data" style="width: 450px;">
+ 
+        <div class="mb-3">
+            <label for="exampleInputName" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="exampleInputName" name="FullName" value="@Model.FullName" aria-describedby="NameHelp">
+        </div>
+
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" name="Email" value="@Model.Email" aria-describedby="emailHelp">
+        </div>
+
+        <div class="mb-3">
+            <label for="exampleInputAddress" class="form-label">Address</label>
+            <input type="text" class="form-control" id="examplAddress" name="Address" value="@Model.Address" aria-describedby="AddressHelp">
+        </div>
+
+        <div class="mb-3">
+            <label for="exampleInputPhoneNum" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" id="exampleInputPhoneNum" name="PhoneNumber" value="@Model.PhoneNumber">
+        </div>
+
+        <div class="mb-3">
+            <label for="numOfFriends" class="form-label">Number Of Friends </label>
+            <input type="number" class="form-control" id="numOfFriends" name="NumOfFriends" value="1" oninput="UpdateTotalCost()" min="1">
+        </div>
+        <input type="hidden" name="TotalCost" id="hiddenTotalCost"  />
+        <input type="hidden" name="tripId" value="@ViewBag.Trip.Id" />
+       
+        <p>the TotalPrice:-  <span id="totalCost">@ViewBag.Trip.TripPrice</span></p>
+
+        <button type="submit" class="btn btn-primary" id="submitBooking" style="width: 450px;
+    border-radius: 20px;
+    font-weight: bold;">
+            Submit
+        </button>
+    </form>
+
+</div>
+<script>
+    function UpdateTotalCost() {
+        var TripPrice = @ViewBag.Trip.TripPrice;
+        var numOfFriends = document.getElementById('numOfFriends').value || 1;
+        var totalCost = TripPrice * numOfFriends;
+        document.getElementById('totalCost').innerHTML = totalCost.toFixed(2);
+        document.getElementById('totalCost').value = totalCost.toFixed(2);
+    }
+</script>
+
+

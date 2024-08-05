@@ -1,9 +1,4 @@
-﻿@model CompanyDetailModel;
-@{
-    var fullStars = (int)Model.NormalizedAverageRating;
-    var halfStar = Model.NormalizedAverageRating - fullStars >= 0.5 ? 1 : 0;
-    var emptyStars = 5 - fullStars - halfStar;
-}
+﻿@model CompanyDetailViewModel;
 
 <!DOCTYPE html>
 <head>
@@ -22,30 +17,44 @@
             </div>
            @*  <img src="/Images/@Model.ImageUrl" style="width: 100%" /> *@
             <h1 class="card-title">@Model.Name</h1>
-            <ul class="list-unstyled d-flex">
-
-              
-                @for (int i = 0; i < fullStars; i++)
+            <ul class="list-unstyled d-flex" data-company-id="@Model.Id">
+                @for(int i = 1; i <= 5; i++)
                 {
-                    <li><span class="fas fa-star"></span></li>
-                }
-                @if (halfStar == 1)
-                {
-                    <li><span class="fas fa-star-half-alt"></span></li>
-                }
-                @for (int i = 0; i < emptyStars; i++)
-                {
-                    <li><span class="far fa-star"></span></li>
+                    <li><span class="far fa-star star-rate" data-rating="@i" style="cursor:pointer"></span></li>
                 }
             </ul>
             @foreach (var Trip in Model.Trips)
             {
+                var fullStars = (int)Trip.AverageRating;
+                var halfStar = Trip.AverageRating - fullStars >= 0.5 ? 1 : 0;
+                var emptyStars = 5 - fullStars - halfStar;
 
                 <div class="card-trip">
 
                     <img src="/Images/@Trip.MainImage" class="card-img-top" alt="...">
                     <div class="card-trip-body">
-                        <h5 class="card-title">@Trip.Name</h5>
+                        <div class="name-and-rate" style="display: flex;">
+                            <h5 class="card-title" style="padding-right: 20px;" >@Trip.Name</h5>
+                          
+                            <ul class="list-unstyled d-flex">
+
+
+                                @for (int i = 0; i < fullStars; i++)
+                                {
+                                    <li><span class="fas fa-star"></span></li>
+                                }
+                                @if (halfStar == 1)
+                                {
+                                    <li><span class="fas fa-star-half-alt"></span></li>
+                                }
+                                @for (int i = 0; i < emptyStars; i++)
+                                {
+                                    <li><span class="far fa-star"></span></li>
+                                }
+                            </ul>
+                        </div>
+                       
+
                         <p>@Trip.Description</p>
                         <a href="/Company/TripDetail?id=@Trip.Id">Trip Details</a>
                     </div>
@@ -55,22 +64,63 @@
             }
 
         </div>
-        
-           @*  @foreach (var Trip in Model.Trips)
-            {
-               
-                <div class="card-trip">
-                  
-                    <img src="/Images/@Trip.MainImage" class="card-img-top" alt="...">
-                    <div class="card-trip-body">
-                        <h5 class="card-title">@Trip.Name</h5>
-                        <p>@Trip.Description</p>
-                        <a href="/Company/TripDetail?id=@Trip.Id">Trip Details</a>
-                    </div>
-                 
-                </div>
-      
-            } *@
-
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+
+        var userRating = @Model.UserRating;
+        if (userRating) {
+            $('.star-rate').each(function () {
+                var starRating = $(this).data('rating');
+                if (starRating <= userRating) {
+                    $(this).removeClass('far').addClass('fas').css("color", "yellow");
+                } else {
+                    $(this).removeClass('fas').addClass('far').css("color", "");
+                }
+            });
+        }
+
+
+
+        $('.star-rate').on('click', function () {
+            var scoreRating = $(this).data('rating');
+            var compnayId = $(this).closest('ul').data('company-id');
+            var starIcon = $(this);
+
+     
+            $.ajax({
+                url: '@Url.Action("IsLoggedIn", "Account")',
+                type: 'Get',
+                success: function (response) {
+                    if (response.isLoggedIn) {
+                        $.ajax({
+                            url: '@Url.Action("CompanyRating", "Company")',
+                            type: 'Post',
+                            data: { Score: scoreRating, CompanyId: compnayId },
+                            success: function () {
+                                // Highlight stars up to the selected rating
+                                starIcon.closest('ul').find('.star-rate').each(function () {
+                                    var starRating = $(this).data('rating');
+                                    if (starRating <= scoreRating) {
+                                        $(this).removeClass('far').addClass('fas').css("color", "yellow");
+                                    } else {
+                                        $(this).removeClass('fas').addClass('far').css("color", "");
+                                    }
+                                });
+                            },
+                       
+                            error: function () {
+                                alert('An error occurred while adding to favorites.');
+                            }
+                        })
+                    } else {
+                        window.location.href = '@Url.Action("LogIn", "Account")';
+                    }
+                }
+            });
+
+        });
+    });
+</script>

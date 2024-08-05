@@ -22,9 +22,7 @@ namespace TripsCompanySystem.Controllers
 
         public IActionResult Index()
         {
-            var Compaines = _context.Companies.ToList();
-
-       
+            var Compaines = _context.Companies.Include(c => c.Ratings).ToList();
 
             return View(Compaines);
         }

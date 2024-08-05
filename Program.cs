@@ -21,9 +21,11 @@ namespace TripsCompanySystem
             builder.Services.AddDbContext<TripsCompanySystemDbContext>(options =>
             options.UseSqlServer(Config.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>().
+
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).
                 AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<TripsCompanySystemDbContext>();
+                .AddEntityFrameworkStores<TripsCompanySystemDbContext>()
+                .AddDefaultTokenProviders();
 
             TripsCompanySystemDbContext dbContext = new TripsCompanySystemDbContext(options);
             builder.Services.AddCors(options =>

@@ -1,0 +1,41 @@
+﻿@model AddCompanyViewModel;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<head>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+ </head>
+<h3>Create Company</h3>
+<img src="@(!string.IsNullOrEmpty(Model.ImageUrl) ? Model.ImageUrl : "/Images/defaultUserImage.jpeg" )"
+     id="imagePreview" style="width:50px; height: 50px;" />
+<form method="post" action="/Admin/SaveCompany" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="exampleInputName" class="form-label">Upload Company Image</label>
+        <input type="file" class="form-control" id="exampleInputName" name="CompanyImage" onchange="PreviewImage(event)"/>
+    </div>
+
+    <div class="mb-3">
+        <label for="exampleInputUserName" class="form-label">CompanyName</label>
+        <input type="text" class="form-control" id="exampleInputUser" name="CompanyName" @* value="@Model.CompanyName" *@ aria-describedby="UserNameHelp">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<script>
+    function PreviewImage(event) {
+        var file = event.target.files[0];
+        if (file) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var outPut = document.getElementById('imagePreview');
+                outPut.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+</script>

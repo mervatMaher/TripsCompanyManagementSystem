@@ -1,0 +1,45 @@
+﻿@model Company;
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<h3>Edit Company</h3>
+<img src="@(!string.IsNullOrEmpty(Model.ImageUrl) ? "/Images/" + Model.ImageUrl : "/Images/defaultUserImage.jpeg" )"
+     id="imagePreview" style="width:50px; height: 50px;" value="@Model.ImageUrl" />
+
+<form method="post" action="/Admin/EditCompany" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="exampleInputName" class="form-label">Upload Company Image</label>
+        <input type="file" class="form-control" id="exampleInputName" name="CompanyImage" onchange="PreviewImage(event)" value="@Model.ImageUrl">
+    </div>
+
+    <div class="mb-3">
+        <label for="exampleInputUserName" class="form-label">CompanyName</label>
+        <input type="text" class="form-control" id="exampleInputUser" name="CompanyName" value="@Model.Name" aria-describedby="UserNameHelp">
+    </div>
+    <input type="hidden" name="id" value="@Model.Id" />
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+    
+</form>
+
+<script>
+    function PreviewImage(event) {
+        var file = event.target.files[0];
+        if (file) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var outPut = document.getElementById('imagePreview');
+                outPut.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
+

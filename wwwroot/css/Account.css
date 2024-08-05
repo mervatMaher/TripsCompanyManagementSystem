@@ -1,0 +1,25 @@
+﻿/*body {
+    background-image: url('/Images/test1.jpg')
+}
+*/
+
+.verify-main-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.verify-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 15px;
+    position: relative;
+}
+
+.verify-box h3 {
+    position: absolute;
+    top: 10px;
+    font-size: 32px;
+}

@@ -1,6 +1,6 @@
 ﻿namespace TripsCompanySystem.ViewModel
 {
-    public class SeachModel
+    public class SeachViewModel
     {
         public string Search { get; set; }
     }

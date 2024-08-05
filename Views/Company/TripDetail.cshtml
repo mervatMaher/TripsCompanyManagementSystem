@@ -1,50 +1,224 @@
-﻿@model Trip
-@{
-     var fullStars = (int)Model.AverageRating;
-     var halfStar = Model.AverageRating - fullStars >= 0.5 ? 1 : 0;
-     var emptyStars = 5 - fullStars - halfStar;
-}
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> signInManager;
+
+@model Trip
 
 <!DOCTYPE html>
 <head>
 
     <link href="/css/landing.css" rel="stylesheet">
     <link href="/css/landingBody.css" rel="stylesheet" />
+    <link href="/css/tripDetails.css" rel="stylesheet" />
+
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
     <!-- Link to the external CSS file -->
 </head>
-<image src="/Images/@Model.MainImage"></image>
-<h1>Welcome to Trip @Model.Name</h1>
-<ul class="list-unstyled d-flex">
+
+<div class="container-trip">
+    <div class="trip-img">
+        <img src="/Images/@Model.MainImage"/>
+    </div>
+    <div class="body-trip">
+        <div class="name-icon">
+            <h1>Welcome to Trip @Model.Name</h1>
+            <i class="fa-regular fa-heart" data-trip-id="@Model.Id"></i>
+        </div>
+
+        <ul class="list-unstyled d-flex" data-trip-id="@Model.Id">
+            @for (int i = 1; i <= 5; i++)
+            {
+                <li><span class="far fa-star star-rate" data-rating="@i" style="cursor:pointer"></span></li>
+            }
+        </ul>
+       
+
+        <p><span>Description : </span>@Model.Description </p>
+
+        <p><span>DestinationFrom : </span>@Model.DestinationFrom</p>
+        <p><span>DestinationTo : </span>@Model.DestinationTo</p>
+
+        <p><span>TripStartDate : </span>@Model.TripStartDate</p>
+        <p><span>TripEndDate : </span>@Model.TripEndDate</p>
+
+        <p><span>ActualTravels : </span>@Model.ActualTravels</p>
+        <p><span>MaxTravels : </span>@Model.MaxTravels</p>
+
+        <p><span>TripPrice : </span>@Model.TripPrice</p>
+        <p><span>Discount : </span>@Model.Discount</p>
+        <p><span>TripPriceAfterDiscount : </span>@Model.TripPriceAfterDiscount</p>
+
+        <div class="comment-section">
+            <form id="reviewForm">
+                <div class="mb-3">
+                    <label for="exampleInputName"  class="form-label">Add Comment</label>
+                    <input type="text" class="form-control" name="Comment"  id="reviewValue" aria-describedby="NameHelp">
+                    <input type="hidden" class="form-control" name="TripId" value="@Model.Id" id="TripId">
+                </div>
+                <button type="submit" class="btn btn-primary submit-comment">Submit</button>
+                <a href="/Booking/BookingView?tripId=@Model.Id" class="btn btn-primary" >Book Now!</a>
+           </form>
+            <div class="review-container">
+                @if (ViewBag.Reviews != null) {
+                    @foreach (var review in ViewBag.Reviews)
+                    {
+                        <div class="comment-section">
+                            <p>
+                                <span>@review.UserName</span>
+                                @review.UserComment
+                            </p>
+                            @if (signInManager.IsSignedIn(User) && ViewData["CurrentUserId"]?.ToString() == review.UserId.ToString())
+                            {
+                                <a href="/Trip/DeleteReview?ReviewId=@review.ReviewId">Delete</a>
+
+                            }
+                        </div>
+                    }
+                }
+                
+            </div>
+        </div>
+    </div>
+
+</div>
 
 
-    @for (int i = 0; i < fullStars; i++)
-    {
-        <li><span class="fas fa-star"></span></li>
-    }
-    @if (halfStar == 1)
-    {
-        <li><span class="fas fa-star-half-alt"></span></li>
-    }
-    @for (int i = 0; i < emptyStars; i++)
-    {
-        <li><span class="far fa-star"></span></li>
-    }
-</ul>
-<p>@Model.Description </p>
+<script>
+    $(document).ready(function () {
+        $('.fa-heart').on('click', function () {
+            var tripId = $(this).data("trip-id");
+            var heartIcon = $(this);
 
-<p>@Model.DestinationFrom</p>
-<p>@Model.DestinationTo</p>
+            // Check if user is logged in
+            $.ajax({
+                url: '@Url.Action("IsLoggedIn", "Account")',
+                type: 'GET',
+                success: function (response) {
+                    if (response.isLoggedIn) {
+                        // If logged in, add trip to favorites
+                        $.ajax({
+                            url: '@Url.Action("AddFavToList", "Trip")',
+                            type: 'POST',
+                            data: { tripId: tripId },
+                            success: function () {
+                                heartIcon.css("color", "red");
+                            },
+                            error: function () {
+                                alert('An error occurred while adding to favorites.');
+                            }
+                        });
+                    } else {
+                        // If not logged in, redirect to login page
+                        window.location.href = '@Url.Action("LogIn", "Account")';
+                    }
+                },
+                error: function () {
+                    alert('An error occurred while checking login status.');
+                }
+            });
+        });
+    });
 
-<p>@Model.TripStartDate</p>
-<p>@Model.TripEndDate</p>
+    $(document).ready(function () {
+        $('#reviewForm').on('submit', function () {
+            event.preventDefault();
 
-<p>@Model.ActualTravels</p>
-<p>@Model.MaxTravels</p>
+            var inputValue = $('#reviewValue').val();
+            var tripId = $('#TripId').val();
+            $.ajax({
+                url: '@Url.Action("IsLoggedIn", "Account")',
+                type: 'GET',
+                success: function (response) {
+                    if (response.isLoggedIn) {
+                        $.ajax({
+                            url: '@Url.Action("Review", "Trip")',
+                            type: 'Post',
+                            data: { Comment: inputValue ,TripId: tripId } ,
+                            success: function (response) {
+                                // $('.review-container').html(response) ;
+                                window.location.href = '@Url.Action("TripDetail", "Company")' + '?id=' + tripId;
 
-<p>@Model.TripPrice</p>
-<p>@Model.Discount</p>
-<p>@Model.TripPriceAfterDiscount</p>
 
-@* <i> Average Rating</i> *@
+                                // $('#reviewValue').val('');
+                            },
+                            error: function () {
+                                alert('An error occurred while submitting the review.');
+                            }
+                        });
+                    } else {
+                        window.location.href = '@Url.Action("LogIn", "Account")'
+                    }
+                },
+                error: function () {
+                    alert('An error occurred while checking login status.');
+                }
+
+
+            });
+        });
+    });
+
+    $(document).ready(function () {
+
+        var UserRating = @ViewData["UserRate"];
+        if (UserRating) {
+            $('.star-rate').each(function () {
+                var starRating = $(this).data('rating');
+                if (starRating <= UserRating) {
+                    $(this).removeClass('far').addClass('fas').css("color", "yellow");
+                } else {
+                    $(this).removeClass('fas').addClass('far').css("color", "");
+                }
+            });
+        }
+
+
+        $('.star-rate').on('click', function () {
+            var scoreRating = $(this).data('rating');
+            var tripId = $(this).closest('ul').data('trip-id');
+            var starIcon = $(this);
+
+
+            $.ajax({
+                url: '@Url.Action("IsLoggedIn", "Account")',
+                type: 'Get',
+                success: function (response) {
+                    if (response.isLoggedIn) {
+                        $.ajax({
+                            url: '@Url.Action("TripRating", "Trip")',
+                            type: 'Post',
+                            data: { Score: scoreRating, TripId: tripId },
+                            success: function () {
+                                // Highlight stars up to the selected rating
+                                starIcon.closest('ul').find('.star-rate').each(function () {
+                                    var starRating = $(this).data('rating');
+                                    if (starRating <= scoreRating) {
+                                        $(this).removeClass('far').addClass('fas').css("color", "yellow");
+                                    } else {
+                                        $(this).removeClass('fas').addClass('far').css("color", "");
+                                    }
+                                });
+                            },
+
+                            error: function () {
+                                alert('An error occurred while adding to favorites.');
+                            }
+                        })
+                    } else {
+                        window.location.href = '@Url.Action("LogIn", "Account")';
+                    }
+                }
+            });
+
+        });
+    });
+
+</script>
+
+
+
+
+
+
+
+

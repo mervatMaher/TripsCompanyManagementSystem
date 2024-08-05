@@ -1,40 +1,106 @@
-﻿@model RegistrationModel 
-<h1>Registration</h1> 
-<form method="post" action="/Account/SaveRegistration">
-    <div class="mb-3">
-        <label for="exampleInputName" class="form-label">Full Name</label>
-        <input type="text" class="form-control" id="exampleInputName" name="FullName" value="@Model.FullName" aria-describedby="NameHelp">
+﻿@model RegistrationViewModel 
+@{
+    ViewBag.ShowFooter = false;
+}
+
+<!DOCTYPE html>
+<head>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh; /* Ensure full viewport height */
+        }
+
+        .register-main-box .main-image {
+            margin: 0;
+            padding: 0;
+        }
+
+        .button-link-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+    </style>
+</head>
+
+
+<div class="main-div-register" style=" display: flex;
+align-items: center;
+">
+    <div class="register-main-box">
+        <img class="main-image" src="/Images/registImage.jpeg" />
+    </div>
+    <div style="padding-left: 100px;">
+        <h1>Create An Account</h1>
+        <form method="post" action="/Account/SaveRegistration" enctype="multipart/form-data" style="width: 450px;">
+
+            <img src="@(!string.IsNullOrEmpty(Model.ImageUrl) ? Model.ImageUrl : "/Images/defaultUserImage.jpeg" )" 
+             id="imagePreview" style="width:50px; height: 50px;" />
+            <div class="mb-3">
+                <label for="exampleInputName" class="form-label">Upload Your Image</label>
+                <input type="file" class="form-control" id="exampleInputName" onchange="PreviewImage(event)" name="Image">
+            </div>
+
+
+            <div class="mb-3">
+                <label for="exampleInputName" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="exampleInputName" name="FullName" value="@Model.FullName" aria-describedby="NameHelp">
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleInputUserName" class="form-label">UserName</label>
+                <input type="text" class="form-control" id="exampleInputUser" name="UserName" value="@Model.UserName" aria-describedby="UserNameHelp">
+
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" name="Email" value="@Model.Email" aria-describedby="emailHelp">
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleInputPhoneNum" class="form-label">Phone Number</label>
+                <input type="text" class="form-control" id="exampleInputPhoneNum" name="PhoneNumber" value="@Model.PhoneNumber">
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" name="Password" @Model.Password>
+            </div>
+
+            <div class="button-link-box">
+                <button type="submit" class="btn btn-primary" style="width: 200px;
+    border-radius: 20px;
+    font-weight: bold;">
+                    Submit
+                </button>
+                <a href="/Account/LogIn">Already Have Account?</a>
+            </div>
+    
+        </form>
+
+      
     </div>
 
-    <div class="mb-3">
-        <label for="exampleInputUserName" class="form-label">UserName</label>
-        <input type="text" class="form-control" id="exampleInputUser" name="UserName" value="@Model.UserName" aria-describedby="UserNameHelp">
+</div>
 
-    </div>
+<script>
+    function PreviewImage(event) {
+        var file = event.target.files[0];
+        if (file) {
+            var reader = new FileReader();
 
-    <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" name="Email" value="@Model.Email" aria-describedby="emailHelp">
-    </div>
-
-    <div class="mb-3">
-        <label for="exampleInputPhoneNum" class="form-label">Phone Number</label>
-        <input type="text" class="form-control" id="exampleInputPhoneNum" name="PhoneNum" value="@Model.PhoneNum">
-    </div>
-
-    <div class="mb-3">
-        <label for="exampleInputImage" class="form-label">Profile Image</label>
-        <input type="file" class="form-control" id="exampleInputImage" name="Image" value="@Model.Image">
-    </div>
-
-    <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" name="Password" @Model.Password>
-    </div>
-
-    <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1" name="RememberMe" value="@Model.RememberMe">
-        <label class="form-check-label" for="exampleCheck1">Remember Me</label>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+            reader.onload = function (e) {
+                var outPut = document.getElementById('imagePreview');
+                outPut.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+</script>

@@ -24,7 +24,7 @@ namespace TripsCompanySystem.Models
         public int CompanyId { get; set; }
         public Company Company { get; set; }
         public ICollection<Booking> Bookings { get; set; }
-        public ICollection<Reviews> Reviews { get; set; }
+        public ICollection<Review> Reviews { get; set; }
         public ICollection<Favorite> Favorites { get; set;}
         public ICollection<Rating> Ratings { get; set; }
 

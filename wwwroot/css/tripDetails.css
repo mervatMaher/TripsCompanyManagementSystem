@@ -1,0 +1,35 @@
+﻿
+:root {
+    --surface-color: #fff;
+    --curve: 40;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: #fef8f8;
+}
+
+.container-trip {
+    display: flex;
+    justify-content: space-between;
+ 
+}
+
+img {
+ 
+    height: 550px;
+}
+.name-icon {
+    display: flex;
+    justify-content: space-between;
+}
+.body-trip .name-icon h1 {
+    font-weight: bold;
+}
+.body-trip p span {
+    font-weight: bold;
+}

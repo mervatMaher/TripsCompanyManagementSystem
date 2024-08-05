@@ -12,7 +12,7 @@ namespace TripsCompanySystem.Data
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Rating> Ratings { get; set; }
-        public DbSet<Reviews> Reviews { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         public DbSet<Trip> Trips { get; set; }
         public TripsCompanySystemDbContext(DbContextOptions options) : base (options)
         {

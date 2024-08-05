@@ -144,9 +144,9 @@ search-result-item a:hover {
 }
 
 .fa-star, .fa-star-half-alt {
-    color: black;
+    color: #f3d814;
     font-size: 11px;
-    margin: 0 1px;
+    margin: 0 1px; 
 }
 
 

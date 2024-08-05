@@ -244,14 +244,27 @@ namespace TripsCompanySystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("BookingDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumOfFriends")
                         .HasColumnType("int");
 
-                    b.Property<int>("TotalCost")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("TotalCost")
+                        .HasColumnType("float");
 
                     b.Property<int>("TripId")
                         .HasColumnType("int");
@@ -266,7 +279,7 @@ namespace TripsCompanySystem.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bookings", (string)null);
+                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("TripsCompanySystem.Models.Company", b =>
@@ -286,7 +299,7 @@ namespace TripsCompanySystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Companies", (string)null);
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("TripsCompanySystem.Models.Favorite", b =>
@@ -310,7 +323,7 @@ namespace TripsCompanySystem.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Favorites", (string)null);
+                    b.ToTable("Favorites");
                 });
 
             modelBuilder.Entity("TripsCompanySystem.Models.Payment", b =>
@@ -334,7 +347,7 @@ namespace TripsCompanySystem.Migrations
 
                     b.HasIndex("BookingId");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("TripsCompanySystem.Models.Rating", b =>
@@ -345,13 +358,13 @@ namespace TripsCompanySystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CompanyId")
+                    b.Property<int?>("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<int>("Score")
                         .HasColumnType("int");
 
-                    b.Property<int>("TripId")
+                    b.Property<int?>("TripId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -366,10 +379,10 @@ namespace TripsCompanySystem.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Ratings", (string)null);
+                    b.ToTable("Ratings");
                 });
 
-            modelBuilder.Entity("TripsCompanySystem.Models.Reviews", b =>
+            modelBuilder.Entity("TripsCompanySystem.Models.Review", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -394,7 +407,7 @@ namespace TripsCompanySystem.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("TripsCompanySystem.Models.Trip", b =>
@@ -451,7 +464,7 @@ namespace TripsCompanySystem.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Trips", (string)null);
+                    b.ToTable("Trips");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -567,15 +580,11 @@ namespace TripsCompanySystem.Migrations
                 {
                     b.HasOne("TripsCompanySystem.Models.Company", "Company")
                         .WithMany("Ratings")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CompanyId");
 
                     b.HasOne("TripsCompanySystem.Models.Trip", "Trip")
                         .WithMany("Ratings")
-                        .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TripId");
 
                     b.HasOne("TripsCompanySystem.Models.ApplicationUser", "User")
                         .WithMany("Ratings")
@@ -590,7 +599,7 @@ namespace TripsCompanySystem.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TripsCompanySystem.Models.Reviews", b =>
+            modelBuilder.Entity("TripsCompanySystem.Models.Review", b =>
                 {
                     b.HasOne("TripsCompanySystem.Models.Trip", "Trip")
                         .WithMany("Reviews")

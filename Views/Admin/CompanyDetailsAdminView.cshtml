@@ -1,0 +1,106 @@
+﻿@model CompanyDetailsAdminViewModel;
+
+<!DOCTYPE html>
+<head>
+
+    <link href="/css/landing.css" rel="stylesheet">
+    <link href="/css/landingBody.css" rel="stylesheet" />
+    <style>
+
+        body, html {
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            background-color: #fef8f8;
+        }
+        .table-body, .table-thead {
+            background-color: white;
+            
+        }
+        .table-thead {
+            margin-bottom: 20px;
+            height: 45px;
+            position: relative;
+            margin-top: 20px;
+           
+        }
+
+        .table-thead thead {
+           border-bottom-color: snow;
+                border-radius: 10px;
+        }
+
+        .table-body {
+            border-radius: 10px;
+        }
+
+        .moderator-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50px; 
+        }
+
+        .delete-icon {
+            color: #c0392b;
+        }
+     
+        .full-width-image-container {
+            height: 300px;
+        }
+       
+        
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <!-- Link to the external CSS file -->
+</head>
+<div class="container-company-Detail">
+    <div class="d-flex flex-wrap">
+        <div class="nav-company-container">
+            <h1 class="card-title">@ViewBag.Company.CompanyName</h1>
+            <div class="full-width-image-container">
+                <img src="/Images/@ViewBag.Company.companyImage" style="width: 100%" />
+            </div>
+
+            @if (ViewBag.Company.Moderators != null)
+            {
+                <table class="table table-thead">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col" class="thead-img">Image</th>
+                            <th scope="col" class="thead-name">Name</th>
+                            <th class="actions">Actions </th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <table class="table table-body">
+                    <tbody>
+                        @{
+                            int Counter = 1;
+                        }
+                        @foreach (var Moderator in ViewBag.Company.Moderators)
+                        {
+                            <tr>
+                                <th scope="row">@Counter</th>
+                                <td>
+                                    <img src="/Images/@Moderator.ModeratorImage" class="card-img-top moderator-image" alt="...">
+                                </td>
+                                <td>
+                                    <p>@Moderator.ModeratorName</p>
+                                </td>
+                                <td>
+                                    <a href="/Admin/DeleteModerator?id=@Moderator.ModeratorId" class="delete-icon"><i class="fa-solid fa-trash"></i></a>
+                                </td>
+                            </tr>
+                            Counter++;
+                        }
+                    </tbody>
+                </table>
+            } else
+            {
+                <h3> There is no moderatores in this company!</h3>
+            }
+           
+         </div>
+    </div>
+</div> 

@@ -1,0 +1,37 @@
+﻿@model RegistrationViewModel
+<h1>Registration</h1>
+<form method="post" action="/Admin/SaveUserInAdmin" enctype="multipart/form-data">
+
+    <div class="mb-3">
+        <label for="exampleInputName" class="form-label">Upload Your Image</label>
+        <input type="file" class="form-control" id="exampleInputName" name="Image" value="@Model.Image">
+    </div>
+
+    <div class="mb-3">
+        <label for="exampleInputName" class="form-label">Full Name</label>
+        <input type="text" class="form-control" id="exampleInputName" name="FullName" value="@Model.FullName" aria-describedby="NameHelp">
+    </div>
+
+    <div class="mb-3">
+        <label for="exampleInputUserName" class="form-label">UserName</label>
+        <input type="text" class="form-control" id="exampleInputUser" name="UserName" value="@Model.UserName" aria-describedby="UserNameHelp">
+
+    </div>
+
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" name="Email" value="@Model.Email" aria-describedby="emailHelp">
+    </div>
+
+    <div class="mb-3">
+        <label for="exampleInputPhoneNum" class="form-label">Phone Number</label>
+        <input type="text" class="form-control" id="exampleInputPhoneNum" name="PhoneNumber" value="@Model.PhoneNumber">
+    </div>
+
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" name="Password" @Model.Password>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

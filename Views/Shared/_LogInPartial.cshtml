@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> signInManager;
+@inject UserManager<ApplicationUser> userManager;
+
+<ul class="nav-bar nav ms-auto">
+    @if (signInManager.IsSignedIn(User))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="LogOut">LogOut</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Trip" asp-action="Favorites">Favorites</a>
+        </li>
+        if (User.IsInRole("Admin"))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Admin" asp-action="AllCompaines">Compaines Controll</a>
+            </li>
+        }
+        if (User.IsInRole("Moderator"))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Moderator" asp-action="CreateTrips">Add Trips</a>
+            </li>
+        }
+
+    } else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="LogIn">LogIn</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
+        </li>
+        
+    }
+
+ 
+</ul>
