@@ -14,8 +14,6 @@ namespace TripsCompanySystem.Models
         public string DestinationFrom {  get; set; }
         public string DestinationTo { get; set; }
         public int? Discount { get; set; }
-
-        //[DataType(DataType.Currency)]
         public double? TripPrice {  get; set; }
         public double? TripPriceAfterDiscount { get; set;}
         public int? MaxTravels { get; set; }

@@ -1,0 +1,190 @@
+﻿@* @model ApplicationUser *@
+@{
+    ViewBag.ShowFooter = false;
+}
+
+<!DOCTYPE html>
+<head>
+    <style>
+        body, html {
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            background-color: #fef8f8;
+        }
+        .background-box {
+            height: 250px;
+            background-color: #e8daef;
+            border-radius: 20px;
+            position: relative;
+            margin-top: 40px;
+        }
+
+        .background-box img {
+                height: 250px;
+                position: absolute;
+                right: -1px;
+        }
+
+
+            .background-box h3 {
+                position: absolute;
+                top: 40px;
+                left: 80px;
+                font-weight: bold;
+            }
+
+            .background-box p {
+                top: 90px;
+                position: absolute;
+                left: 80px;
+            }
+
+            .background-box a {
+                top: 140px;
+                position: absolute;
+                left: 80px;
+                width: 200px;
+                border-radius: 10px;
+                background-color: #a569bd;
+                border-color: #a569bd;
+                color: white;
+                height: 45px;
+            }
+
+
+        .table-thead {
+            margin-bottom: 20px;
+            height: 45px;
+            position: relative;
+            margin-top: 20px;
+        }
+
+            .table-thead thead {
+                border-bottom-color: snow;
+                border-radius: 10px;
+            }
+        .table-thead thead tr .thead-img {
+                    left: 138px;
+                    position: absolute;
+        }
+
+        .table-thead thead tr .thead-name {
+                    position: absolute;
+                    left: 380px;
+        }
+
+        .table-thead thead tr .actions {
+                    position: absolute;
+                    right: 290px;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .table-body img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50px;
+        }
+        .table-body {
+            border-radius: 10px;
+        }
+        .table-body, .table-thead {
+            background-color: white;
+        }
+
+        .popUpForm {
+            overflow: auto;
+        }
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+</head>
+<div class="moderator-main-container">
+    <div class="thead-container">
+        <div class="background-box">
+            <h3>Welcome @ViewBag.CompanyTrips.UserName!</h3>
+            <p>
+                @ViewBag.CompanyTrips.CompanyName, This is Now your offical company,
+                <span>now you can add any Trips you want in your company!!!</span>
+            </p>
+            <a href="/Moderator/CreateTrip?id=@ViewBag.CompanyTrips.CompanyId" data-id="@ViewBag.CompanyTrips.CompanyId" class="btn" id="createTripBtn">Create Trip</a>
+            <img src="~/Images/@ViewBag.CompanyTrips.CompanyImage" />
+        </div>
+
+        <table class="table table-thead">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col" class="thead-img">Image</th>
+                    <th scope="col" class="thead-name">Name</th>
+                    <th class="actions">Actions </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <table class="table table-body">
+        <tbody>
+            @{
+                int Counter = 1;
+            }
+            @foreach (var Trip in ViewBag.CompanyTrips.Trips)
+            {
+                <tr>
+                    <th scope="row">@Counter</th>
+                    <td>
+                        <img src="/Images/@Trip.TripImage" class="card-img-top company-image" alt="...">
+                    </td>
+                    <td>
+                        <a href="/Company/TripDetail?id=@Trip.TripId" class="company-name" style="padding-right: 20px;">@Trip.TripName</a>
+                    </td>
+                    <td>
+                        <a href="/Moderator/EditTripView?TripId=@Trip.TripId" class="edit-company-popUp" data-id="@Trip.TripId"><i class="fa-regular fa-pen-to-square"></i></a> ||
+                        <a href="/Moderator/DeleteTrip?TripId=@Trip.TripId" class="delete-icon"> <i class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+                Counter++;
+            }
+        </tbody>
+    </table>
+</div>
+<div class="popup" id="popUpForm">
+    <div class="popup-content">
+        <span class="close-btn" id="closePopUp">&times;</span>
+        <div id="popupContent">Loading...</div>
+    </div>
+</div>
+
+@* <script>
+    $(document).ready(function () {
+        $('#createTripBtn').on('click', function () {
+            var companyId = $(this).data('id');
+            $('#popUpForm').show();
+            // $('body').css("overflow", "hidden");
+            $('#popupContent').load("/Moderator/CreateTrip?id=" + companyId);
+        });
+
+
+        $('#closePopUp').click(function () {
+            $('popUpForm').hide();
+            $('body').css("overflow", "auto");
+        });
+
+        $(window).click(function (event) {
+            if (event.target.id == "popupForm") {
+                $("#popupForm").hide();
+                $("body").css("overflow", "auto");
+            }
+        });
+
+    })
+</script>
+ *@
+
+
+
+
+         

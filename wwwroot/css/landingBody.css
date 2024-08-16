@@ -55,21 +55,7 @@ body {
     width: 100%;
     overflow: hidden;
 }
-    /*.full-width-image-container img {
-        width: 100%;*/
-       /* height: 450px;*/
-    /*}*/
-/*.nav-company-container {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    flex-direction: column;
 
-}*/
-/*.container-company-Detail {
-    display: flex;
-    flex-direction: column;
-}*/
 .d-flex flex-wrap {
     display: flex;
     align-items: center;

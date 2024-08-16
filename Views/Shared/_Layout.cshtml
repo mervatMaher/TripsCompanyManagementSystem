@@ -16,6 +16,42 @@
     <link href="/css/Account.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/e8dc964e88.js" crossorigin="anonymous"></script>
     @RenderSection("Styles", required: false)
+
+    <style>
+        footer {
+            background-color: #003366;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+        .footer-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin-top: 50px;
+            color: white;
+        }
+
+        .footer-ul {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+        }
+
+        .footer-li {
+            text-decoration: none;
+           /*  padding: 10px; */
+            padding-right: 10px;
+            font-size: 18px;
+        }
+        .footer-p {
+            padding-top: 30px;
+        }
+        
+   
+    </style>
 </head>
 <body>
     <header>
@@ -46,21 +82,29 @@
             @RenderBody()
             @if (showFooter)
             {
+                <footer>
+                    <div class="footer-container">
+                        <div><p class="footer-p">&copy; 2024 - TripsCompanySystem</p></div>
+                        <div>
+                            <ul class="footer-ul">
+                                <li class="footer-li"><i class="fa-brands fa-facebook"></i></li>
+                                <li class="footer-li"><i class="fa-brands fa-twitter"></i></li>
+                                <li class="footer-li"><i class="fa-solid fa-envelope"></i></li>
+                                <li class="footer-li"><i class="fa-brands fa-linkedin"></i></li>
+                            </ul>
+                        </div>
+                    </div>
+                </footer>
+       @* 
                 <footer class="border-top footer text-muted">
                     <div class="container">
                         &copy; 2024 - TripsCompanySystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                     </div>
-                </footer>
+                </footer> *@
             }
          @*    @RenderSection("Scripts", required: false) *@
         </main>
     </div>
-
-  @*   <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - TripsCompanySystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer> *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

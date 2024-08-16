@@ -9,7 +9,22 @@
     <link href="/css/landing.css" rel="stylesheet">
     <link href="/css/landingBody.css" rel="stylesheet" />
     <link href="/css/tripDetails.css" rel="stylesheet" />
+    <style>
+        body {
+            overflow: hidden;
+        }
 
+        .trip-img img {
+            height: 650px;
+            object-fit: cover;
+        }
+
+        .body-trip {
+            height: 650px;
+            overflow: auto;
+        }
+     
+    </style>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
     <!-- Link to the external CSS file -->
@@ -56,7 +71,11 @@
                     <input type="hidden" class="form-control" name="TripId" value="@Model.Id" id="TripId">
                 </div>
                 <button type="submit" class="btn btn-primary submit-comment">Submit</button>
-                <a href="/Booking/BookingView?tripId=@Model.Id" class="btn btn-primary" >Book Now!</a>
+                @if (!User.IsInRole("Moderator"))
+                {
+                    <a href="/Booking/BookingView?tripId=@Model.Id" class="btn btn-primary">Book Now!</a>
+                }
+                
            </form>
             <div class="review-container">
                 @if (ViewBag.Reviews != null) {
@@ -67,7 +86,7 @@
                                 <span>@review.UserName</span>
                                 @review.UserComment
                             </p>
-                            @if (signInManager.IsSignedIn(User) && ViewData["CurrentUserId"]?.ToString() == review.UserId.ToString())
+                            @if (signInManager.IsSignedIn(User) && ViewData["CurrentUserId"]?.ToString() == review.UserId.ToString() || User.IsInRole("Moderator"))
                             {
                                 <a href="/Trip/DeleteReview?ReviewId=@review.ReviewId">Delete</a>
 

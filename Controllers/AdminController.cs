@@ -71,7 +71,7 @@ namespace TripsCompanySystem.Controllers
                     await _signInManager.SignInAsync(user, false);
 
                     return RedirectToAction("Index", "Home");
-                }
+                } 
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -285,7 +285,7 @@ namespace TripsCompanySystem.Controllers
 
             }
 
-            return RedirectToAction("AddModeratorInCompany", "Admin");
+            return RedirectToAction("AddModeratorInCompany", "Admin", new {id = Id });
         }
 
 

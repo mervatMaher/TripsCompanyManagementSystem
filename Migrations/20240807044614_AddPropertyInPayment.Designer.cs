@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TripsCompanySystem.Data;
 
@@ -11,9 +12,11 @@ using TripsCompanySystem.Data;
 namespace TripsCompanySystem.Migrations
 {
     [DbContext(typeof(TripsCompanySystemDbContext))]
-    partial class TripsCompanySystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240807044614_AddPropertyInPayment")]
+    partial class AddPropertyInPayment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -345,12 +348,6 @@ namespace TripsCompanySystem.Migrations
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("ProductDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

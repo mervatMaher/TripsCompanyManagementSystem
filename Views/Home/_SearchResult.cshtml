@@ -1,7 +1,20 @@
 ﻿<head>
 
     <link href="/css/landing.css" rel="stylesheet">
-    </head>
+    <style>
+        .result-image {
+            width:50px;
+            height: 50px;
+            border-radius: 50px;
+        }
+
+        .search-result-item a {
+            color: black;
+        }
+
+    </style>
+   
+</head>
 
 @{
     Layout = null;
@@ -19,14 +32,14 @@
             {
                 var company = item as Company;
                 <div class="search-result-item" >
-                   @*  <img src="/Images/@company.ImageUrl" /> *@
+                    <img class="result-image" src="/Images/@company.ImageUrl" />
                     <a href="/Company/CompanyDetail?id=@company.Id">@company.Name</a>
                 </div>
             } else if (item is Trip)
             {
                 var trip = item as Trip;
                 <div class="search-result-item">
-                  @*   <img src="/Images/@trip.MainImage" /> *@
+                    <img class="result-image" src="/Images/@trip.MainImage" />
                     <a href="/Company/TripDetail?id=@trip.Id">@trip.Name</a>
                 </div>
             }

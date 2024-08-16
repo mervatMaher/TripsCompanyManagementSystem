@@ -216,11 +216,11 @@ namespace TripsCompanySystem.Controllers
         }
 
 
-        public IActionResult ShowProfile(string id)
-        {
-            var user = _context.Users.Find(id);
-            return View(user);
-        }
+        //public IActionResult ShowProfile(string id)
+        //{
+        //    var user = _context.Users.Find(id);
+        //    return View(user);
+        //}
 
         public IActionResult EditProfile (string id)
         {
@@ -267,7 +267,7 @@ namespace TripsCompanySystem.Controllers
             _context.Update(user);
             _context.SaveChanges();
 
-            return RedirectToAction("ShowProfile", "Account" ,new {id = user.Id});
+            return RedirectToAction("Index", "Home");
         }
 
         

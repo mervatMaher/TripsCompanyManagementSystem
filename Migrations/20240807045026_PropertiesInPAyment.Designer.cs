@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TripsCompanySystem.Data;
 
@@ -11,9 +12,11 @@ using TripsCompanySystem.Data;
 namespace TripsCompanySystem.Migrations
 {
     [DbContext(typeof(TripsCompanySystemDbContext))]
-    partial class TripsCompanySystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240807045026_PropertiesInPAyment")]
+    partial class PropertiesInPAyment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

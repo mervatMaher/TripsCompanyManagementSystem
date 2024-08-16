@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using TripsCompanySystem.Data;
 using TripsCompanySystem.Models;
 
@@ -43,7 +44,9 @@ namespace TripsCompanySystem
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            // add stripe 
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
             var app = builder.Build();
 

@@ -1,10 +1,71 @@
 ﻿@model CompanyDetailViewModel;
-
+@{
+    ViewBag.ShowFooter = false;
+}
 <!DOCTYPE html>
 <head>
 
-    <link href="/css/landing.css" rel="stylesheet">
-    <link href="/css/landingBody.css" rel="stylesheet" />
+@*     <link href="/css/landing.css" rel="stylesheet">
+    <link href="/css/landingBody.css" rel="stylesheet" /> *@
+    <style>
+
+        body {
+            overflow: hidden;
+        }
+      
+        .company-details {
+            display: flex;
+            justify-content: space-between;
+        }
+        .full-width-image-container img {
+            width: 500px;
+            height: 700px;
+            object-fit: cover;
+        }
+
+        .company-info {
+            padding-left: 100px;
+            height: 700px;
+            overflow: auto;
+            overflow-x: hidden;
+        }
+
+        .card-trip {
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 180px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: white;
+        }
+
+        .card-trip:hover {
+            transition-duration: 0.2s;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-trip-body {
+            padding-left: 30px;
+        }
+      
+       
+
+        .card-trip-img img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .fa-star, .fa-star-half-alt {
+            color: #f3d814;
+            font-size: 11px;
+            margin: 0 1px;
+        }
+     
+       
+     
+    </style>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
     <!-- Link to the external CSS file -->
@@ -12,56 +73,63 @@
 <div class="container-company-Detail">
     <div class="d-flex flex-wrap">
         <div class="nav-company-container">
-            <div class="full-width-image-container">
-                <img src="/Images/@Model.ImageUrl" style="width: 100%" />
-            </div>
-           @*  <img src="/Images/@Model.ImageUrl" style="width: 100%" /> *@
-            <h1 class="card-title">@Model.Name</h1>
-            <ul class="list-unstyled d-flex" data-company-id="@Model.Id">
-                @for(int i = 1; i <= 5; i++)
-                {
-                    <li><span class="far fa-star star-rate" data-rating="@i" style="cursor:pointer"></span></li>
-                }
-            </ul>
-            @foreach (var Trip in Model.Trips)
-            {
-                var fullStars = (int)Trip.AverageRating;
-                var halfStar = Trip.AverageRating - fullStars >= 0.5 ? 1 : 0;
-                var emptyStars = 5 - fullStars - halfStar;
+            <div class="company-details">
+                <div class="full-width-image-container">
+                    <img src="/Images/@Model.ImageUrl" />
+                </div>
 
-                <div class="card-trip">
+                <div class="company-info">
+                    <h1 class="card-title">@Model.Name</h1>
+                    <ul class="list-unstyled d-flex" data-company-id="@Model.Id">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <li><span class="far fa-star star-rate" data-rating="@i" style="cursor:pointer"></span></li>
+                        }
+                    </ul>
+                    @foreach (var Trip in Model.Trips)
+                    {
+                        var fullStars = (int)Trip.AverageRating;
+                        var halfStar = Trip.AverageRating - fullStars >= 0.5 ? 1 : 0;
+                        var emptyStars = 5 - fullStars - halfStar;
 
-                    <img src="/Images/@Trip.MainImage" class="card-img-top" alt="...">
-                    <div class="card-trip-body">
-                        <div class="name-and-rate" style="display: flex;">
-                            <h5 class="card-title" style="padding-right: 20px;" >@Trip.Name</h5>
-                          
-                            <ul class="list-unstyled d-flex">
+                        <div class="card-trip">
+                            <div class="card-trip-img">
+                                <img src="/Images/@Trip.MainImage" class="card-img-top" alt="...">
+                            </div>
 
+                            <div class="card-trip-body">
+                                <div class="name-and-rate" style="display: flex;">
+                                    <h5 class="card-title" style="padding-right: 20px;">@Trip.Name</h5>
+                                    <ul class="list-unstyled d-flex">
+                                        @for (int i = 0; i < fullStars; i++)
+                                        {
+                                            <li><span class="fas fa-star"></span></li>
+                                        }
+                                        @if (halfStar == 1)
+                                        {
+                                            <li><span class="fas fa-star-half-alt"></span></li>
+                                        }
+                                        @for (int i = 0; i < emptyStars; i++)
+                                        {
+                                            <li><span class="far fa-star"></span></li>
+                                        }
+                                    </ul>
+                                </div>
+                                <div class="trip-description">
+                                    <p>@Trip.Description</p>
+                                    <a href="/Company/TripDetail?id=@Trip.Id">Trip Details</a>
+                                </div>
+                            </div>
 
-                                @for (int i = 0; i < fullStars; i++)
-                                {
-                                    <li><span class="fas fa-star"></span></li>
-                                }
-                                @if (halfStar == 1)
-                                {
-                                    <li><span class="fas fa-star-half-alt"></span></li>
-                                }
-                                @for (int i = 0; i < emptyStars; i++)
-                                {
-                                    <li><span class="far fa-star"></span></li>
-                                }
-                            </ul>
                         </div>
-                       
 
-                        <p>@Trip.Description</p>
-                        <a href="/Company/TripDetail?id=@Trip.Id">Trip Details</a>
-                    </div>
+                    }
 
                 </div>
 
-            }
+            </div>
+
+            
 
         </div>
     </div>

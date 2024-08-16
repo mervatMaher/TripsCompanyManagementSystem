@@ -110,15 +110,16 @@ namespace TripsCompanySystem.Controllers
         public IActionResult DeleteReview(int ReviewId)
         {
             var userId = _userManager.GetUserId(User);
-            var reviewId = _context.Reviews.Where(r => r.Id == ReviewId && r.UserId == userId).FirstOrDefault();
-            var tripId = _context.Reviews.Where(r => r.Id == ReviewId && r.UserId == userId)
+            var reviewId = _context.Reviews.Where(r => r.Id == ReviewId).FirstOrDefault();
+            var tripId = _context.Reviews.Where(r => r.Id == ReviewId)
                 .Select(r => r.TripId).FirstOrDefault();
             if (reviewId != null)
             {
                 _context.Reviews.Remove(reviewId);
                 _context.SaveChanges();
             }
-            return RedirectToAction("TripDetail", "Company", new {id = tripId });
+            return RedirectToAction("TripDetail", "Company", new { id = tripId });
+
         }
 
         public IActionResult TripRating(TripRatingViewModel ratingModel)

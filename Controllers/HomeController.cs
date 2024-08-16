@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 using System.Linq;
 using TripsCompanySystem.Data;
@@ -10,21 +12,39 @@ namespace TripsCompanySystem.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly TripsCompanySystemDbContext _context;
-
-
-        public HomeController(ILogger<HomeController> logger, TripsCompanySystemDbContext context)
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ILogger<HomeController> _logger;
+        public HomeController(TripsCompanySystemDbContext context, IServiceProvider serviceProvider, ILogger<HomeController> logger)
         {
             _context = context;
+            _roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            _userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            _signInManager = serviceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
+            _serviceProvider = serviceProvider;
             _logger = logger;
         }
 
-        public IActionResult Index()
-        {
+         public IActionResult HomeView()
+         {
+            var userId = _userManager.GetUserId(User);
             var Compaines = _context.Companies.Include(c => c.Ratings).ToList();
 
+            var UserName = _context.Users.Where( u => u.Id == userId).Select(u => u.FullName).FirstOrDefault();
+            ViewBag.UserName = UserName;
             return View(Compaines);
+         }
+        public IActionResult Index()
+        {
+            var topCompanies = _context.Companies
+              .Include(c => c.Ratings)
+             .OrderByDescending(c => c.Ratings.Any() ? c.Ratings.Average(r => r.Score) : 0)
+             .Take(6)
+             .ToList();
+            return View(topCompanies);
         }
         public IActionResult Search (string search)
         {
