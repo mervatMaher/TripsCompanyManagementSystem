@@ -1,0 +1,75 @@
+﻿@model CreatePaymentViewModel
+@using Stripe 
+@{
+    ViewBag.Title = "Checkout";
+    ViewBag.ShowFooter = false;
+}
+<!DOCTYPE html>
+<head>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+
+<h2>Checkout</h2>
+<h3>BookingID @ViewBag.bookingId </h3>
+<form action="/Payment/CreatePayment" method="post" id="payment-form">
+    <div class="mb-3">
+        <label for="amount" class="form-label">Amount</label>
+        <input type="number" class="form-control" id="amount" name="Amount" value="@Model.Amount" step="0.01" aria-describedby="AmountHelp">
+    </div>
+    <div class="mb-3">
+        <label for="Currency" class="form-label">Currency</label>
+        <input type="text" class="form-control" name="Currency" value="USD" id="currency">
+    </div>
+
+    <div class="mb-3">
+        <label for="PaymentDate" class="form-label">PaymentDate</label>
+        <input type="datetime-local" name="PaymentDate" value="@Model.PaymentDate" class="form-control" id="PaymentDate" />
+    </div>
+
+    <input type="hidden" name="bookingId" value="@ViewBag.bookingId" />
+
+    <div id="card-element">
+        <!-- A Stripe Element will be inserted here. -->
+    </div>
+    
+
+    <div id="card-errors" role="alert"></div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+<script>
+    var stripe = Stripe('@ViewBag.StripPublishKey');
+    var elements = stripe.elements();
+
+    // Create an instance of the card Element
+    var card = elements.create('card');
+    card.mount('#card-element');
+
+    // Handle form submission
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        stripe.createToken(card).then(function (result) {
+            if (result.error) {
+                var elementError = document.getElementById('card-errors');
+                elementError.textContent = result.error.message;
+            } else {
+                // Send the token to your server
+                var hiddentInput = document.createElement('input');
+                hiddentInput.setAttribute('type', 'hidden');
+                hiddentInput.setAttribute('name', 'stripeToken');
+                hiddentInput.setAttribute('value', result.token.id);
+                form.appendChild(hiddentInput);
+                form.submit();
+            }
+        })
+
+
+    })
+    
+
+</script>

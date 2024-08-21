@@ -27,7 +27,7 @@
             <label for="numOfFriends" class="form-label">Number Of Friends </label>
             <input type="number" class="form-control" id="numOfFriends" name="NumOfFriends" value="1" oninput="UpdateTotalCost()" min="1">
         </div>
-        <input type="hidden" name="TotalCost" id="hiddenTotalCost"  />
+        <input type="hidden" name="TotalCost" value="@ViewBag.Trip.TripPrice" id="hiddenTotalCost" />
         <input type="hidden" name="tripId" value="@ViewBag.Trip.Id" />
        
         <p>the TotalPrice:-  <span id="totalCost">@ViewBag.Trip.TripPrice</span></p>

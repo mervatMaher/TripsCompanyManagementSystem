@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TripsCompanySystem.Data;
 
@@ -11,9 +12,11 @@ using TripsCompanySystem.Data;
 namespace TripsCompanySystem.Migrations
 {
     [DbContext(typeof(TripsCompanySystemDbContext))]
-    partial class TripsCompanySystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240817075712_PAymentDeleteDescription")]
+    partial class PAymentDeleteDescription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -348,9 +351,11 @@ namespace TripsCompanySystem.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentStatus")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StripePaymentId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

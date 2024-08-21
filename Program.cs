@@ -28,6 +28,8 @@ namespace TripsCompanySystem
                 .AddEntityFrameworkStores<TripsCompanySystemDbContext>()
                 .AddDefaultTokenProviders();
 
+            StripeConfiguration.ApiKey = Config["Stripe:SecretKey"];
+
             TripsCompanySystemDbContext dbContext = new TripsCompanySystemDbContext(options);
             builder.Services.AddCors(options =>
             {
@@ -44,9 +46,6 @@ namespace TripsCompanySystem
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            // add stripe 
-            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
-            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
             var app = builder.Build();
 

@@ -38,6 +38,7 @@ namespace TripsCompanySystem.Controllers
         public IActionResult SaveBooking( int tripId,BookingViewModel bookingView)
         {
             var userId = _userManager.GetUserId(User);
+
             var booking = new Booking
             {
                 Name = bookingView.FullName,
@@ -56,7 +57,9 @@ namespace TripsCompanySystem.Controllers
                 _context.Bookings.Add(booking);
                 _context.SaveChanges();
             }
-            return RedirectToAction("TripDetail", "Company", new {id = tripId });
+
+            TempData["bookingId"] = booking.Id;
+            return RedirectToAction("Checkout", "Payment", new { bookingId = booking.Id });
         }
     }
 }
