@@ -1,69 +1,17 @@
 ﻿@model VerifyViewModel
 
 @{
-    ViewBag.ShowFooter = false;
+    Layout = null;
 }
-
 
 <!DOCTYPE html>
 <head>
    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-    <style>
-        html, body {
-            margin: 0; /* Remove default margins */
-            padding: 0; /* Remove default padding */
-        }
-
-
-        .verify-main-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 400px;
-            height: 300px;
-            background-color: #EEEE;
-            position: relative;
-            border-radius: 15px;
-            margin: auto;
-            top: 120px;
-        }
-
-
-        .verify-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            border-radius: 15px;
-            width: 400px;
-            height: 300px;
-          
-        }
-
-        .verify-box {
-            position: absolute;
-            top: 10px;
-            font-size: 32px;
-        }
-
-        .verify-box h3 {
-                font-size: 32px;
-                position: absolute;
-                top: 15px;
-        }
-
-       .verify-box .mb-3 input {
-                width: 250px;
-       }
-
-        
-     
-    </style>
 </head>
 
 <div class="verify-main-box" style="">
-    <div class="verify-box">
+    <div>
         <h3>Verify Email </h3>
         <form asp-action="SaveVerifyEmail" asp-controller="Account" method="post">
             <div class="mb-3">

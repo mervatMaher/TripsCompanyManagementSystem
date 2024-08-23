@@ -223,6 +223,7 @@ namespace TripsCompanySystem.Controllers
         public IActionResult AddModeratorInCompany(int id)
         {
            var Moderator = new ModeratorViewModel();
+
             var companyId = _context.Companies.Where(c => c.Id == id).Select(c => c.Id).FirstOrDefault();
             var CompanyName = _context.Companies.Where(c => c.Id == id).Select(c => c.Name).FirstOrDefault();
             var company = _context.Companies.Find(id);

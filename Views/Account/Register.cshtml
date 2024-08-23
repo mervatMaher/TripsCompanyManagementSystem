@@ -11,7 +11,7 @@
         body {
             margin: 0;
             padding: 0;
-            overflow: hidden;
+           /*  overflow: hidden; */
             height: 100vh; /* Ensure full viewport height */
         }
 
@@ -51,27 +51,38 @@ align-items: center;
             <div class="mb-3">
                 <label for="exampleInputName" class="form-label">Full Name</label>
                 <input type="text" class="form-control" id="exampleInputName" name="FullName" value="@Model.FullName" aria-describedby="NameHelp">
+                <span asp-validation-for="FullName" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label for="exampleInputUserName" class="form-label">UserName</label>
                 <input type="text" class="form-control" id="exampleInputUser" name="UserName" value="@Model.UserName" aria-describedby="UserNameHelp">
+                <span asp-validation-for="UserName" class="text-danger"></span>
 
             </div>
 
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email address</label>
                 <input type="email" class="form-control" id="exampleInputEmail1" name="Email" value="@Model.Email" aria-describedby="emailHelp">
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label for="exampleInputPhoneNum" class="form-label">Phone Number</label>
                 <input type="text" class="form-control" id="exampleInputPhoneNum" name="PhoneNumber" value="@Model.PhoneNumber">
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Password</label>
                 <input type="password" class="form-control" id="exampleInputPassword1" name="Password" @Model.Password>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="exampleInputConfirmPassword" name="ConfirmPassword">
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
 
             <div class="button-link-box">

@@ -18,12 +18,13 @@ namespace TripsCompanySystem.Controllers
             _userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             _serviceProvider = serviceProvider;
         }
-        public IActionResult Companies()
-        {
-            var Compaines = _context.Companies.ToList();
-            return View(Compaines);
-        }
+        //public IActionResult Companies()
+        //{
+        //    var Compaines = _context.Companies.ToList();
+        //    return View(Compaines);
+        //}
 
+        [HttpGet]
         public IActionResult CompanyDetail(int id)
         {
             var userId = _userManager.GetUserId(User);
@@ -68,6 +69,7 @@ namespace TripsCompanySystem.Controllers
             return View(CompanyDetails);
 
         }
+        [HttpPost]
         public IActionResult CompanyRating(CompanyRatingViewModel ratingModel)
         {
             var userId = _userManager.GetUserId(User);
@@ -98,15 +100,13 @@ namespace TripsCompanySystem.Controllers
             return RedirectToAction("CompanyDetail", new {id = ratingModel.CompanyId });
         }
 
+        [HttpGet]
         public IActionResult TripDetail(int id)
         {
             var currentUserId = _userManager.GetUserId(User);
             var Trip = _context.Trips.Find(id);
             var userRate = _context.Ratings.Where(r => r.UserId == currentUserId && r.TripId == id).Select(r => r.Score).FirstOrDefault();
-            //if (Trip == null)
-            //{
-            //    return RedirectToAction("Error", "Home"); // Handle trip not found scenario
-            //}
+            var userBooked = _context.Bookings.Any(b => b.UserId == currentUserId && b.TripId == id);
 
             var reviews = _context.Reviews.Include(r => r.User).Where(r => r.TripId == id)
         .Select(r => new
@@ -122,6 +122,7 @@ namespace TripsCompanySystem.Controllers
             ViewData["currentReview"] = TempData["CurrentReview"];
             ViewData["CurrentUserId"] = currentUserId;
             ViewData["UserRate"] = userRate;
+            ViewData["UserBooked"] = userBooked;
             return View(Trip);
         }
 

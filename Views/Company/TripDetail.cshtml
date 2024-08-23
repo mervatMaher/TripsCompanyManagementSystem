@@ -23,6 +23,18 @@
             height: 650px;
             overflow: auto;
         }
+
+        .user-img {
+            width: 50px;
+            height: 50px; 
+            border-radius: 50px;
+        }
+
+
+        .child-comment-section {
+            display: flex;
+            justify-content: space-between;
+        }
      
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -40,12 +52,16 @@
             <i class="fa-regular fa-heart" data-trip-id="@Model.Id"></i>
         </div>
 
-        <ul class="list-unstyled d-flex" data-trip-id="@Model.Id">
-            @for (int i = 1; i <= 5; i++)
-            {
-                <li><span class="far fa-star star-rate" data-rating="@i" style="cursor:pointer"></span></li>
-            }
-        </ul>
+        @if (ViewBag.UserBooked)
+        {
+            <ul class="list-unstyled d-flex" data-trip-id="@Model.Id">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <li><span class="far fa-star star-rate" data-rating="@i" style="cursor:pointer"></span></li>
+                }
+            </ul>
+        }
+       
        
 
         <p><span>Description : </span>@Model.Description </p>
@@ -59,7 +75,7 @@
         <p><span>ActualTravels : </span>@Model.ActualTravels</p>
         <p><span>MaxTravels : </span>@Model.MaxTravels</p>
 
-        <p><span>TripPrice : </span>@Model.TripPrice</p>
+        <p><span>TripPrice : </span>@Model.TripPrice $</p>
         <p><span>Discount : </span>@Model.Discount</p>
         <p><span>TripPriceAfterDiscount : </span>@Model.TripPriceAfterDiscount</p>
 
@@ -82,15 +98,17 @@
                     @foreach (var review in ViewBag.Reviews)
                     {
                         <div class="comment-section">
-                            <p>
-                                <span>@review.UserName</span>
-                                @review.UserComment
-                            </p>
-                            @if (signInManager.IsSignedIn(User) && ViewData["CurrentUserId"]?.ToString() == review.UserId.ToString() || User.IsInRole("Moderator"))
-                            {
-                                <a href="/Trip/DeleteReview?ReviewId=@review.ReviewId">Delete</a>
+                            <div class="child-comment-section">
+                                <p>
+                                    <span>@review.UserName</span>
+                                    @review.UserComment
+                                </p>
+                                @if (signInManager.IsSignedIn(User) && ViewData["CurrentUserId"]?.ToString() == review.UserId.ToString() || User.IsInRole("Moderator"))
+                                {
+                                    <a href="/Trip/DeleteReview?ReviewId=@review.ReviewId">Delete</a>
 
-                            }
+                                }
+                            </div>        
                         </div>
                     }
                 }
@@ -154,11 +172,8 @@
                             type: 'Post',
                             data: { Comment: inputValue ,TripId: tripId } ,
                             success: function (response) {
-                                // $('.review-container').html(response) ;
+                           
                                 window.location.href = '@Url.Action("TripDetail", "Company")' + '?id=' + tripId;
-
-
-                                // $('#reviewValue').val('');
                             },
                             error: function () {
                                 alert('An error occurred while submitting the review.');

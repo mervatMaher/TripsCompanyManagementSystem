@@ -215,13 +215,6 @@ namespace TripsCompanySystem.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
-        //public IActionResult ShowProfile(string id)
-        //{
-        //    var user = _context.Users.Find(id);
-        //    return View(user);
-        //}
-
         public IActionResult EditProfile (string id)
         {
             var user = _context.Users.Find(id);

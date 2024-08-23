@@ -1,53 +1,125 @@
 ﻿@model BookingViewModel
-<div>
-    <h1>Book Trip :- @ViewBag.Trip.Name </h1>
-    <form method="post" action="/Booking/SaveBooking" enctype="multipart/form-data" style="width: 450px;">
- 
-        <div class="mb-3">
-            <label for="exampleInputName" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="exampleInputName" name="FullName" value="@Model.FullName" aria-describedby="NameHelp">
-        </div>
+@{
+    ViewBag.ShowFooter = false;
+}
+<!DOCTYPE html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh; /* Ensure full viewport height */
+        }
 
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Email</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" name="Email" value="@Model.Email" aria-describedby="emailHelp">
-        </div>
+        .main-container {
+            display: flex;
 
-        <div class="mb-3">
-            <label for="exampleInputAddress" class="form-label">Address</label>
-            <input type="text" class="form-control" id="examplAddress" name="Address" value="@Model.Address" aria-describedby="AddressHelp">
-        </div>
+            justify-content: space-between;
+          /*   position: relative; */
+        }
 
-        <div class="mb-3">
-            <label for="exampleInputPhoneNum" class="form-label">Phone Number</label>
-            <input type="text" class="form-control" id="exampleInputPhoneNum" name="PhoneNumber" value="@Model.PhoneNumber">
-        </div>
+        .form-container {
+            background-color: white;
+            width: 500px;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+            border-radius: 15px;
+        }
 
-        <div class="mb-3">
-            <label for="numOfFriends" class="form-label">Number Of Friends </label>
-            <input type="number" class="form-control" id="numOfFriends" name="NumOfFriends" value="1" oninput="UpdateTotalCost()" min="1">
+        .personal-p {
+            font-weight: bold;
+            font-size: 18px;
+            position: absolute;
+            top: 10px;
+            left: 23px;
+        }
+
+        button {
+            width: 150px;
+            font-weight: bold;
+        }
+
+        .img-img {
+            margin: 0;
+            padding: 0;
+            height: 650px;
+            width: 500px; 
+            object-fit: cover;
+
+        }
+
+    </style>
+</head>
+
+
+<div class="main-container">
+    <img class="img-img" src="/Images/testBook2.jpg" />
+    <div class= "title-form-container">
+        <h1>Book Trip :- @ViewBag.Trip.Name </h1>
+        <div class="form-container">
+            <p class="personal-p"> Pesronal Data : </p>
+            <form method="post" action="/Booking/SaveBooking" enctype="multipart/form-data" style="width: 450px;">
+
+                <div class="mb-3">
+                    <label for="exampleInputName" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="exampleInputName" name="FullName" value="@Model.FullName" aria-describedby="NameHelp">
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="exampleInputEmail1" name="Email" value="@Model.Email" aria-describedby="emailHelp">
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleInputAddress" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="examplAddress" name="Address" value="@Model.Address" aria-describedby="AddressHelp">
+                </div>
+
+                <div class="phone-and-num">
+                    <div class="mb-3">
+                        <label for="exampleInputPhoneNum" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="exampleInputPhoneNum" name="PhoneNumber" value="@Model.PhoneNumber">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="numOfFriends" class="form-label">Num Of Friends </label>
+                        <input type="number" class="form-control" id="numOfFriends" name="NumOfFriends" value="1" oninput="UpdateTotalCost()" min="1">
+                    </div>
+                </div>
+
+                <input type="hidden" name="TotalCost" value="@ViewBag.Trip.TripPrice" id="hiddenTotalCost" />
+                <input type="hidden" name="tripId" value="@ViewBag.Trip.Id" />
+
+                <p>the Total Price:-  <span id="totalCost">@ViewBag.Trip.TripPrice $</span></p>
+
+                <button type="submit" class="btn btn-primary" id="submitBooking">
+                    Submit
+                </button>
+            </form>
         </div>
-        <input type="hidden" name="TotalCost" value="@ViewBag.Trip.TripPrice" id="hiddenTotalCost" />
-        <input type="hidden" name="tripId" value="@ViewBag.Trip.Id" />
+    </div>
        
-        <p>the TotalPrice:-  <span id="totalCost">@ViewBag.Trip.TripPrice</span></p>
-
-        <button type="submit" class="btn btn-primary" id="submitBooking" style="width: 450px;
-    border-radius: 20px;
-    font-weight: bold;">
-            Submit
-        </button>
-    </form>
-
 </div>
+
+
 <script>
-    function UpdateTotalCost() {
-        var TripPrice = @ViewBag.Trip.TripPrice;
-        var numOfFriends = document.getElementById('numOfFriends').value || 1;
-        var totalCost = TripPrice * numOfFriends;
-        document.getElementById('totalCost').innerHTML = totalCost.toFixed(2);
-        document.getElementById('totalCost').value = totalCost.toFixed(2);
-    }
+        function UpdateTotalCost() {
+            var TripPrice = @ViewBag.Trip.TripPrice;
+            var numOfFriends = document.getElementById('numOfFriends').value || 1;
+            var totalCost = TripPrice * numOfFriends;
+            document.getElementById('totalCost').innerHTML = totalCost.toFixed(2);
+            document.getElementById('totalCost').value = totalCost.toFixed(2);
+
+        document.getElementById('hiddenTotalCost').value = totalCost.toFixed(2);
+        }
 </script>
+
+
 
 

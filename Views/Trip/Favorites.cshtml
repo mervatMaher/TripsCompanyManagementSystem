@@ -19,8 +19,6 @@
                 <div class="card-body">
                     <h5 class="card-title">@Trip.TripName</h5>
                     <a href="/Company/TripDetail?id=@Trip.TripId" class="btn btn-primary">Show Details</a>
-@*                     <a href="#" class="btn btn-danger btn-remove-favorite" data-trip-id="@Trip.TripId">Delete</a>
- *@
                     <a href="/Trip/Delete?id=@Trip.TripId" class="btn btn-danger btn-remove-favorite" data-trip-id="@Trip.TripId">Delete</a>
 
                 </div>
@@ -28,29 +26,3 @@
         }
     </div>
 </div>
-@* <script>
-    $(document).ready(function () {
-        $('.btn-remove-favorite').on('click', function (e) {
-            e.preventDefault(); // Prevent the default anchor action
-
-            var card = $(this).closest('.card');
-            var tripId = $(this).data('trip-id');
-
-            // Remove the card from the UI
-            card.remove();
-
-            // Optionally, notify the server about the removal
-            $.ajax({
-                url: '@Url.Action("RemoveFromFavorites", "Trip")',
-                type: 'POST',
-                data: { tripId: tripId },
-                success: function () {
-                    console.log('Trip removed from favorites.');
-                }
-                // error: function () {
-                //     alert('An error occurred while removing the trip.');
-                // }
-            });
-        });
-    });
-</script> *@

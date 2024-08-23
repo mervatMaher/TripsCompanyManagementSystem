@@ -1,4 +1,8 @@
-﻿<head>
+﻿@model IEnumerable<object>
+@{
+    Layout = null;
+}
+<head>
 
     <link href="/css/landing.css" rel="stylesheet">
     <style>
@@ -16,12 +20,10 @@
    
 </head>
 
-@{
-    Layout = null;
-}
 
 
-@model IEnumerable<object>
+
+
 
 <div id="searchResultsContent">
     @if(Model != null && Model.Any())

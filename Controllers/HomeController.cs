@@ -27,16 +27,7 @@ namespace TripsCompanySystem.Controllers
             _serviceProvider = serviceProvider;
             _logger = logger;
         }
-
-         public IActionResult HomeView()
-         {
-            var userId = _userManager.GetUserId(User);
-            var Compaines = _context.Companies.Include(c => c.Ratings).ToList();
-
-            var UserName = _context.Users.Where( u => u.Id == userId).Select(u => u.FullName).FirstOrDefault();
-            ViewBag.UserName = UserName;
-            return View(Compaines);
-         }
+        [HttpGet]
         public IActionResult Index()
         {
             var topCompanies = _context.Companies
@@ -46,6 +37,18 @@ namespace TripsCompanySystem.Controllers
              .ToList();
             return View(topCompanies);
         }
+
+        [HttpGet]
+         public IActionResult HomeView()
+         {
+            var userId = _userManager.GetUserId(User);
+            var Compaines = _context.Companies.Include(c => c.Ratings).ToList();
+
+            var UserName = _context.Users.Where( u => u.Id == userId).Select(u => u.FullName).FirstOrDefault();
+            ViewBag.UserName = UserName;
+            return View(Compaines);
+         }
+    
         public IActionResult Search (string search)
         {
             var SearchResults = new List<object>();
@@ -66,10 +69,10 @@ namespace TripsCompanySystem.Controllers
             return View("_SearchResult", SearchResults);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        //public IActionResult Privacy()
+        //{
+        //    return View();
+        //}
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

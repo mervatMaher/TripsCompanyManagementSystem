@@ -161,7 +161,6 @@
     </style>
 
 
-    <!-- Link to the external CSS file -->
 </head>
 <!--landing container  -->
 <div class="container-landing">
@@ -296,16 +295,15 @@
 
 <script>
     jQuery(document).ready(function () {
+
         $('#searchButton').click(function () {
             var resultItems = $('#inputSearch').val();
-            // if (resultItems.trim() !== "") {
             $.ajax({
                 url: '/Home/Search',
                 type: 'POST',
                 data: { search: resultItems },
                 success: function (data) {
                     $('#searchResults').html(data);
-                    // $('#basicHomeContent').hide();
 
                 },
                 error: function (xhr, status, error) {
@@ -314,7 +312,15 @@
 
             });
         })
+
+        $(document).keydown(function (e) {
+            if (e.key === "Escape") {
+                $('#searchResults').hide();
+            }
+        });
     })
+
+
 </script>
 
 

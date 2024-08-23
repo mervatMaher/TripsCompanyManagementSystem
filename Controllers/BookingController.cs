@@ -28,10 +28,15 @@ namespace TripsCompanySystem.Controllers
         }
         public IActionResult BookingView(int tripId)
         {
+            var userId = _userManager.GetUserId(User);
             var trip = _context.Trips.Find(tripId);
             var bookingView = new BookingViewModel();
             ViewBag.Trip = trip;
 
+            if (userId == null )
+            {
+                return RedirectToAction("LogIn", "Account");
+            }
             return View(bookingView);
         }
 
@@ -59,6 +64,7 @@ namespace TripsCompanySystem.Controllers
             }
 
             TempData["bookingId"] = booking.Id;
+            //return Json(new { success = true, bookingId = booking.Id });
             return RedirectToAction("Checkout", "Payment", new { bookingId = booking.Id });
         }
     }

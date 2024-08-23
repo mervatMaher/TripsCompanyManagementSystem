@@ -44,6 +44,7 @@ namespace TripsCompanySystem.Controllers
             return View();
         }
 
+        [HttpPost]
         public IActionResult AddFavToList(int tripId)
         {
             var userId = _userManager.GetUserId(User);
@@ -73,6 +74,7 @@ namespace TripsCompanySystem.Controllers
 
             return RedirectToAction("Favorites");
         }
+        [HttpPost]
         public IActionResult Review (ReviewViewModel reviewModel)
         {
             var userId = _userManager.GetUserId(User);
@@ -81,12 +83,6 @@ namespace TripsCompanySystem.Controllers
             {
                 Console.WriteLine($"Received TripId: {reviewModel.TripId}");
                 bool tripExists = _context.Trips.Any(t => t.Id == reviewModel.TripId);
-
-                //if (!tripExists)
-                //{
-                //    // Handle the case where the trip does not exist (e.g., show an error message)
-                //    return RedirectToAction("Error", "Home");
-                //}
 
                 var review = new Review
                 {
